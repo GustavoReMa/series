@@ -5,10 +5,14 @@ import com.example.series.utils.Constants;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ServiceFactory {
+public class ServiceClient {
 
     public static IUserService createUserService() {
         return createRetrofit().create(IUserService.class);
+    }
+
+    public static ISerieService createSerieService() {
+        return createRetrofit().create(ISerieService.class);
     }
 
     private static Retrofit createRetrofit() {

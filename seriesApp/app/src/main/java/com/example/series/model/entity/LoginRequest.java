@@ -1,8 +1,8 @@
-package com.example.series.api.data;
+package com.example.series.model.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-public class LoginData {
+public class LoginRequest {
     @SerializedName("apikey")
     public String apikey;
 
@@ -12,7 +12,7 @@ public class LoginData {
     @SerializedName("username")
     public String username;
 
-    public LoginData(String apikey, String userkey, String username) {
+    public LoginRequest(String apikey, String userkey, String username) {
         this.apikey = apikey;
         this.userkey = userkey;
         this.username = username;

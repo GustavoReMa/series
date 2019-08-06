@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Series</string>
+    <string name="logo_app">Logo</string>
+    <string name="entrar">Entrar</string>
+    <string name="name_movie">Nombre de la película</string>
+    <string name="no_banner">No tiene imagen</string>
+    <string name="enter_text">Ingresa un texto</string>
 </resources>

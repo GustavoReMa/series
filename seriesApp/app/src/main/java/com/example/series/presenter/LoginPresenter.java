@@ -1,26 +1,37 @@
 package com.example.series.presenter;
 
-import com.example.series.model.ILoginInteractor;
+import android.content.Context;
+
+import com.example.series.interfaces.ILogin;
 import com.example.series.model.LoginInteractor;
-import com.example.series.view.ILoginView;
 
-public class LoginPresenter implements ILoginPresenter {
+public class LoginPresenter implements ILogin.presenter {
 
-    ILoginView iLoginView;
-    ILoginInteractor loginInteractor = new LoginInteractor(this);
+    ILogin.view iLoginView;
+    ILogin.model loginInteractor;
+    Context ctx;
 
-    public LoginPresenter(ILoginView iLoginView){
+    public LoginPresenter(ILogin.view iLoginView, Context ctx) {
         this.iLoginView = iLoginView;
+        this.ctx = ctx;
+
+        loginInteractor = new LoginInteractor(this, ctx);
     }
 
     @Override
-    public void showToken(String token) {
-        iLoginView.showToken(token);
+    public void getTokenApi() {
+        loginInteractor.getTokenApi();
+    }
+
+
+    @Override
+    public void showErrorApi(String error) {
+        iLoginView.showErrorApi(error);
     }
 
     @Override
-    public void getToken() {
-        loginInteractor.getTokenAPI();
+    public void showTokenUser(String token) {
+        iLoginView.showTokenUser(token);
     }
 
 }

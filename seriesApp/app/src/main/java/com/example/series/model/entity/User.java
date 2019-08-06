@@ -1,4 +1,4 @@
-package com.example.series.api.data;
+package com.example.series.model.entity;
 
 public class User {
 
