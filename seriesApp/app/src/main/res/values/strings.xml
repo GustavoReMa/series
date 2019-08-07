@@ -5,4 +5,10 @@
     <string name="name_movie">Nombre de la película</string>
     <string name="no_banner">No tiene imagen</string>
     <string name="enter_text">Ingresa un texto</string>
+    <string name="name_serie">Nombre de la serie</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="divider_rating">/10</string>
+    <string name="not_found">No se encontró</string>
 </resources>

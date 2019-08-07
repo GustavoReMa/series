@@ -1,7 +1,9 @@
 package com.example.series.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import com.example.series.R;
 import com.example.series.model.entity.Serie;
 import com.example.series.utils.Constants;
+import com.example.series.view.SerieDetailsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -51,15 +54,15 @@ public class SerieDetailAdapter extends RecyclerView.Adapter<SerieDetailAdapter.
             holder.banner.setBackgroundColor(Color.WHITE);
         }
 
-//        holder.banner.setOnClickListener(view -> {
-//            Bundle bundle = new Bundle();
-//            Intent intent = new Intent(ctx, SerieDetailsActivity.class);
-//            bundle.putInt("id", serie.getId());
-//            bundle.putString("seriesName", serie.getSeriesName());
-//            intent.putExtra("serie", bundle);
-//
-//            ctx.startActivity(intent);
-//        });
+        holder.banner.setOnClickListener(view -> {
+            Bundle bundle = new Bundle();
+            Intent intent = new Intent(ctx, SerieDetailsActivity.class);
+            bundle.putInt("id", serie.getId());
+            bundle.putString("seriesName", serie.getSeriesName());
+            intent.putExtra("serie", bundle);
+
+            ctx.startActivity(intent);
+        });
     }
 
 

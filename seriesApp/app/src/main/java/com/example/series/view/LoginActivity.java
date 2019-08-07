@@ -38,7 +38,6 @@ public class LoginActivity extends AppCompatActivity implements ILogin.view {
     public void login() {
         rotateLoading.start();
         getTokenUser();
-        rotateLoading.stop();
     }
 
 
@@ -54,7 +53,8 @@ public class LoginActivity extends AppCompatActivity implements ILogin.view {
 
     @Override
     public void showTokenUser(String token) {
-        Toast.makeText(this, token, Toast.LENGTH_SHORT).show();
+        rotateLoading.stop();
+        Log.e(TAG,token);
         Intent intent = new Intent(LoginActivity.this, SerieSearchActivity.class);
         startActivity(intent);
     }

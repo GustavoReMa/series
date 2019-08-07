@@ -12,8 +12,8 @@ public interface ISerie {
     }
 
     interface presenter {
-        //Presenter
-        void showErrorApi(String error);
+        //View
+        void showError(String error);
 
         //Interactor
         void getSeriesApi(String nameSerie);
@@ -23,8 +23,8 @@ public interface ISerie {
     }
 
     interface view {
-        //Presenter
-        void showErrorApi(String error);
+        //View
+        void showError(String error);
 
         //Presenter
         void getSeries(String nameSerie);

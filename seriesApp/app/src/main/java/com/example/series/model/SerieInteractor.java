@@ -20,7 +20,7 @@ public class SerieInteractor implements ISerie.model {
     private static final String TAG = "SerieInteractor";
     ISerie.presenter iSeriePresenter;
     Context ctx;
-    String token = "", name = "";
+    String token = "";
 
     public SerieInteractor(ISerie.presenter iSeriePresenter, Context ctx) {
         this.iSeriePresenter = iSeriePresenter;
@@ -45,12 +45,10 @@ public class SerieInteractor implements ISerie.model {
                     iSeriePresenter.showSeries(response.body().getData());
                 } else {
                     if (response.code() == 401) {
-                        Log.e(TAG, ">>>>" + gson.toJson(response.errorBody()));
-                        iSeriePresenter.showErrorApi("No authorized");
-
+                        iSeriePresenter.showError("Not authorized");
                     } else {
                         if (response.code() == 404) {
-                            iSeriePresenter.showErrorApi("Not Found");
+                            iSeriePresenter.showError("Not Found");
                         }
                     }
                 }

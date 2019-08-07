@@ -35,6 +35,7 @@ public class SerieSearchActivity extends AppCompatActivity implements ISerie.vie
     private List<Serie> mDataSeries = new ArrayList<>();
     private String token = "";
     private String notFound = "";
+    String nameSerie = "";
 
     @BindView(R.id.edt_search_series)
     EditText edtSearchSeries;
@@ -55,9 +56,9 @@ public class SerieSearchActivity extends AppCompatActivity implements ISerie.vie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_serie_search);
+        ButterKnife.bind(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ButterKnife.bind(this);
         iSeriePresenter = new SeriePresenter(this, getApplicationContext());
 
         edtSearchSeries.addTextChangedListener(new TextWatcher() {
@@ -89,7 +90,7 @@ public class SerieSearchActivity extends AppCompatActivity implements ISerie.vie
 
     @OnClick(R.id.btn_search_series)
     public void searchSeries() {
-        String nameSerie = edtSearchSeries.getText().toString();
+        nameSerie = edtSearchSeries.getText().toString();
         if (nameSerie.isEmpty()) {
             Toast.makeText(this, R.string.enter_text, Toast.LENGTH_SHORT).show();
         } else {
@@ -100,15 +101,15 @@ public class SerieSearchActivity extends AppCompatActivity implements ISerie.vie
             txtSeriesNotFound.setText("");
             txtSeriesNotFound.setVisibility(View.GONE);
             getSeries(nameSerie);
-            desactivateRotateloading();
-
         }
     }
 
     @Override
-    public void showErrorApi(String error) {
+    public void showError(String error) {
         desactivateRotateloading();
-        Log.e(TAG, "error: " + error);
+        notFound = getString(R.string.not_found) + " " +nameSerie;
+        txtSeriesNotFound.setVisibility(View.VISIBLE);
+        txtSeriesNotFound.setText(notFound);
 
     }
 
@@ -119,6 +120,7 @@ public class SerieSearchActivity extends AppCompatActivity implements ISerie.vie
 
     @Override
     public void showSeries(List<Serie> mDataSeries) {
+        desactivateRotateloading();
         this.mDataSeries = mDataSeries;
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -152,7 +154,7 @@ public class SerieSearchActivity extends AppCompatActivity implements ISerie.vie
     public void onBackPressed() {
         Intent a = new Intent(Intent.ACTION_MAIN);
         a.addCategory(Intent.CATEGORY_HOME);
-        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        a.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(a);
     }
 }

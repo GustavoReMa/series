@@ -21,8 +21,8 @@ public class SeriePresenter implements ISerie.presenter {
     }
 
     @Override
-    public void showErrorApi(String error) {
-        iSerieView.showErrorApi(error);
+    public void showError(String error) {
+        iSerieView.showError(error);
     }
 
     @Override
