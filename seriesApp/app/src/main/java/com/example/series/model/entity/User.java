@@ -4,7 +4,7 @@ public class User {
 
     private String token;
 
-    public User(String name, String token) {
+    public User(String token) {
         this.token = token;
     }
 

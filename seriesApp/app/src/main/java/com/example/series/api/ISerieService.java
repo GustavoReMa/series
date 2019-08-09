@@ -1,5 +1,6 @@
 package com.example.series.api;
 
+import com.example.series.model.entity.EpisodeData;
 import com.example.series.model.entity.SerieData;
 import com.example.series.model.entity.SerieDetailData;
 
@@ -16,5 +17,7 @@ public interface ISerieService {
     @GET("series/{id}")
     Call<SerieDetailData> getSerieDetail(@Header("Authorization") String authorization, @Path("id") int id);
 
+    @GET("series/{id}/episodes/query")
+    Call<EpisodeData> getEpisodes(@Header("Authorization") String authorization, @Path("id") int id, @Query("airedSeason") int season);
 
 }

@@ -6,14 +6,14 @@ import com.example.series.model.entity.SerieDetailExtras;
 
 import java.util.List;
 
-public interface ISerieDetail {
+public interface IDetailSerie {
 
     interface model{
         void getDetailsSerieApi(int id);
     }
     interface presenter{
         //View
-        void showError(String error);
+        void showErrorDetails(String error);
 
         //Interactor
         void getDetailsSerieApi(int id);
@@ -25,7 +25,7 @@ public interface ISerieDetail {
 
     interface view{
         //View
-        void showError(String error);
+        void showErrorDetails(String error);
 
         //Presenter
         void getSerieDetail(int id);

@@ -2,18 +2,18 @@ package com.example.series.presenter;
 
 import android.content.Context;
 
-import com.example.series.interfaces.ISerieDetail;
+import com.example.series.interfaces.IDetailSerie;
 import com.example.series.model.SerieDetailsInteractor;
 import com.example.series.model.entity.SerieDetail;
 import com.example.series.model.entity.SerieDetailExtras;
 
-public class SerieDetailsPresenter implements ISerieDetail.presenter {
+public class SerieDetailsPresenter implements IDetailSerie.presenter {
 
-    ISerieDetail.view iSerieDetailView;
-    ISerieDetail.model iSerieDetailInteractor;
+    IDetailSerie.view iSerieDetailView;
+    IDetailSerie.model iSerieDetailInteractor;
     Context ctx;
 
-    public SerieDetailsPresenter(ISerieDetail.view iSerieDetailView,Context ctx){
+    public SerieDetailsPresenter(IDetailSerie.view iSerieDetailView, Context ctx){
         this.iSerieDetailView = iSerieDetailView;
         this.ctx = ctx;
         iSerieDetailInteractor = new SerieDetailsInteractor(this,this.ctx);
@@ -21,8 +21,8 @@ public class SerieDetailsPresenter implements ISerieDetail.presenter {
 
 
     @Override
-    public void showError(String error) {
-        iSerieDetailView.showError(error);
+    public void showErrorDetails(String error) {
+        iSerieDetailView.showErrorDetails(error);
     }
 
     @Override

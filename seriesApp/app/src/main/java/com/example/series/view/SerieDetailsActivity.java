@@ -12,19 +12,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.series.R;
-import com.example.series.api.ISerieService;
-import com.example.series.api.ServiceClient;
-import com.example.series.interfaces.ISerieDetail;
+import com.example.series.interfaces.IDetailSerie;
+import com.example.series.interfaces.IEpisodesSerie;
+import com.example.series.model.entity.Episode;
+import com.example.series.model.entity.EpisodeData;
 import com.example.series.model.entity.SerieDetail;
 import com.example.series.model.entity.SerieDetailExtras;
+import com.example.series.presenter.EpisodesPresenter;
 import com.example.series.presenter.SerieDetailsPresenter;
+import com.example.series.utils.IListenerClick;
 import com.google.gson.Gson;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SerieDetailsActivity extends AppCompatActivity implements ISerieDetail.view {
+public class SerieDetailsActivity extends AppCompatActivity implements IDetailSerie.view, IListenerClick, IEpisodesSerie.view {
 
     @BindView(R.id.btn_back)
     ImageView btnBack;
@@ -38,12 +43,14 @@ public class SerieDetailsActivity extends AppCompatActivity implements ISerieDet
     private static final String TAG = "SerieDetailsActivity";
     Boolean loading = false;
     Bundle args;
-    private ISerieDetail.presenter iSerieDetailPresenter;
+    private IDetailSerie.presenter iSerieDetailPresenter;
+    private IEpisodesSerie.presenter iSerieEpisodesPresenter;
 
     private FragmentTabHost tabHost;
     private String token = "", titleSerie = "",imdId = "";
     private SerieDetail serieDetail;
     private int id = 0;
+    private int numberSeason,season;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +61,7 @@ public class SerieDetailsActivity extends AppCompatActivity implements ISerieDet
         setSupportActionBar(toolbar);
 
         iSerieDetailPresenter = new SerieDetailsPresenter(this,getApplicationContext());
+        iSerieEpisodesPresenter = new EpisodesPresenter(this,getApplicationContext());
         Intent intent = getIntent();
         args = intent.getBundleExtra("serie");
 
@@ -82,7 +90,7 @@ public class SerieDetailsActivity extends AppCompatActivity implements ISerieDet
                     navigateToFragmentDetails(this.id);
                     break;
                 case "tab2":
-                    //navigateToFragmentEpisodes(this.token, this.id, 1);
+                    navigateToFragmentEpisodes(this.id, 1);
                     break;
                 case "tab3":
                     //navigateToFragmentActors(this.token, this.id);
@@ -96,8 +104,14 @@ public class SerieDetailsActivity extends AppCompatActivity implements ISerieDet
         getSerieDetail(id);
     }
 
+    private void navigateToFragmentEpisodes(int id, int season) {
+        this.season = season;
+        getEpisodesSerieApi(id,season);
+    }
+
+    //>>>>>>>>>>>>Detalles de serie<<<<<<<<<<<<<<<<<//
     @Override
-    public void showError(String error) {
+    public void showErrorDetails(String error) {
         Log.e(TAG,"error: " + error);
     }
 
@@ -109,12 +123,16 @@ public class SerieDetailsActivity extends AppCompatActivity implements ISerieDet
     @Override
     public void showDetailsSerie(SerieDetail serieDetail, SerieDetailExtras serieDetailExtras) {
         Gson gson = new Gson();
-        //args = null;
         args.putSerializable("details",gson.toJson(serieDetail));
         if(serieDetailExtras==null){
             args.putSerializable("description",null);
         }else{
             args.putSerializable("description",gson.toJson(serieDetailExtras));
+            if(serieDetailExtras.getTotalSeasons().equals("N/A") || serieDetailExtras.getTotalSeasons() == null){
+                numberSeason = 0;
+            }else{
+                numberSeason = Integer.parseInt(serieDetailExtras.getTotalSeasons());
+            }
         }
 
         DetailsFragment detailsFragment = new DetailsFragment();
@@ -124,8 +142,51 @@ public class SerieDetailsActivity extends AppCompatActivity implements ISerieDet
         fragmentTransaction.commit();
 
     }
+    //>>>>>>>>>>>>Termina detalles de serie<<<<<<<<<<<<<<<<<//
+
+    //>>>>>>>>>>>>Episodios de serie<<<<<<<<<<<<<<<<<//
+    @Override
+    public void showErrorEpisodes(String error) {
+        args.putSerializable("notFound","notFound");
+        EpisodesFragment episodesFragment = new EpisodesFragment();
+        episodesFragment.setArguments(args);
+        FragmentTransaction transaction2 = getSupportFragmentManager().beginTransaction();
+        transaction2.replace(R.id.layout_episodes_series, episodesFragment);
+        transaction2.commit();
+        Log.e(TAG,"Error: " + error);
+    }
+
+    @Override
+    public void getEpisodesSerieApi(int id, int season) {
+        iSerieEpisodesPresenter.getEpisodesSerieApi(id,season);
+    }
+
+    @Override
+    public void showEpisodesSerie(EpisodeData episodeData) {
+        Gson gson = new Gson();
+        args.putSerializable("episodes",gson.toJson(episodeData));
+        args.putInt("numberSeason",numberSeason);
+        args.putInt("position",season);
+        args.remove("notFound");
+        EpisodesFragment episodesFragment = new EpisodesFragment();
+        episodesFragment.setArguments(args);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.layout_episodes_series,episodesFragment);
+        fragmentTransaction.commit();
+
+    }
+
+    //>>>>>>>>>>>>Termina episodios de serie<<<<<<<<<<<<<<<<<//
+
     @OnClick(R.id.btn_back)
     public void btnBack() {
         finish();
+    }
+
+    @Override
+    public void getPositionClicked(int pos) {
+        //Método para saber en qué posición se dió click para ver la temporada2
+        Log.e(TAG,"Id de getPositionClicked " + this.id + " y posicion " + pos);
+        navigateToFragmentEpisodes(this.id,pos);
     }
 }

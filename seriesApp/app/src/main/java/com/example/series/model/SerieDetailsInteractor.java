@@ -2,14 +2,12 @@ package com.example.series.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
-import com.example.series.R;
 import com.example.series.api.IDetailsExtrasSerieService;
 import com.example.series.api.ISerieService;
 import com.example.series.api.ServiceClient;
-import com.example.series.interfaces.ISerieDetail;
+import com.example.series.interfaces.IDetailSerie;
 import com.example.series.model.entity.SerieDetail;
 import com.example.series.model.entity.SerieDetailData;
 import com.example.series.model.entity.SerieDetailExtras;
@@ -20,15 +18,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SerieDetailsInteractor implements ISerieDetail.model{
+public class SerieDetailsInteractor implements IDetailSerie.model{
 
     private static final String TAG = "SerieDetailsInteractor";
-    ISerieDetail.presenter iSerieDetailPresenter;
+    IDetailSerie.presenter iSerieDetailPresenter;
     SerieDetail serieDetail;
     SerieDetailExtras serieDetailExtras;
     Context ctx;
     String token = "",imbdId = "";
-    public SerieDetailsInteractor(ISerieDetail.presenter iSerieDetailPresenter, Context ctx){
+    public SerieDetailsInteractor(IDetailSerie.presenter iSerieDetailPresenter, Context ctx){
         this.iSerieDetailPresenter = iSerieDetailPresenter;
         this.ctx = ctx;
     }
@@ -64,11 +62,11 @@ public class SerieDetailsInteractor implements ISerieDetail.model{
                                             iSerieDetailPresenter.showDetailsSerie(serieDetail,serieDetailExtras);
                                         }else{
                                             if (response.code() == 401) {
-                                                iSerieDetailPresenter.showError("Not authorized");
+                                                iSerieDetailPresenter.showErrorDetails("Not authorized");
 
                                             } else {
                                                 if (response.code() == 404) {
-                                                    iSerieDetailPresenter.showError("Not Found");
+                                                    iSerieDetailPresenter.showErrorDetails("Not Found");
                                                 }
                                             }
                                         }
@@ -83,11 +81,11 @@ public class SerieDetailsInteractor implements ISerieDetail.model{
 
                 }else{
                     if (response.code() == 401) {
-                        iSerieDetailPresenter.showError("Not authorized");
+                        iSerieDetailPresenter.showErrorDetails("Not authorized");
 
                     } else {
                         if (response.code() == 404) {
-                            iSerieDetailPresenter.showError("Not Found");
+                            iSerieDetailPresenter.showErrorDetails("Not Found");
                         }
                     }
                 }
