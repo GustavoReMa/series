@@ -12,12 +12,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.series.R;
+import com.example.series.interfaces.IActorSerie;
 import com.example.series.interfaces.IDetailSerie;
 import com.example.series.interfaces.IEpisodesSerie;
+import com.example.series.model.entity.ActorData;
 import com.example.series.model.entity.Episode;
 import com.example.series.model.entity.EpisodeData;
 import com.example.series.model.entity.SerieDetail;
 import com.example.series.model.entity.SerieDetailExtras;
+import com.example.series.presenter.ActorsPresenter;
 import com.example.series.presenter.EpisodesPresenter;
 import com.example.series.presenter.SerieDetailsPresenter;
 import com.example.series.utils.IListenerClick;
@@ -29,7 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SerieDetailsActivity extends AppCompatActivity implements IDetailSerie.view, IListenerClick, IEpisodesSerie.view {
+public class SerieDetailsActivity extends AppCompatActivity implements IDetailSerie.view, IListenerClick, IEpisodesSerie.view, IActorSerie.view {
 
     @BindView(R.id.btn_back)
     ImageView btnBack;
@@ -45,6 +48,7 @@ public class SerieDetailsActivity extends AppCompatActivity implements IDetailSe
     Bundle args;
     private IDetailSerie.presenter iSerieDetailPresenter;
     private IEpisodesSerie.presenter iSerieEpisodesPresenter;
+    private IActorSerie.presenter iSerieActorsPresenter;
 
     private FragmentTabHost tabHost;
     private String token = "", titleSerie = "",imdId = "";
@@ -62,6 +66,7 @@ public class SerieDetailsActivity extends AppCompatActivity implements IDetailSe
 
         iSerieDetailPresenter = new SerieDetailsPresenter(this,getApplicationContext());
         iSerieEpisodesPresenter = new EpisodesPresenter(this,getApplicationContext());
+        iSerieActorsPresenter = new ActorsPresenter(this,getApplicationContext());
         Intent intent = getIntent();
         args = intent.getBundleExtra("serie");
 
@@ -93,7 +98,7 @@ public class SerieDetailsActivity extends AppCompatActivity implements IDetailSe
                     navigateToFragmentEpisodes(this.id, 1);
                     break;
                 case "tab3":
-                    //navigateToFragmentActors(this.token, this.id);
+                    navigateToFragmentActors(this.id);
                     break;
             }
 
@@ -107,6 +112,10 @@ public class SerieDetailsActivity extends AppCompatActivity implements IDetailSe
     private void navigateToFragmentEpisodes(int id, int season) {
         this.season = season;
         getEpisodesSerieApi(id,season);
+    }
+
+    private void navigateToFragmentActors(int id) {
+        getActorSerie(id);
     }
 
     //>>>>>>>>>>>>Detalles de serie<<<<<<<<<<<<<<<<<//
@@ -178,6 +187,35 @@ public class SerieDetailsActivity extends AppCompatActivity implements IDetailSe
 
     //>>>>>>>>>>>>Termina episodios de serie<<<<<<<<<<<<<<<<<//
 
+    //>>>>>>>>>>>>Actores de serie<<<<<<<<<<<<<<<<<//
+    @Override
+    public void showErrorActor(String error) {
+        Log.e(TAG,"Error: " + error);
+        args.putString("notFound","notFound");
+        ActorsFragment actorsFragment = new ActorsFragment();
+        actorsFragment.setArguments(args);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.layout_actors_series,actorsFragment);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void getActorSerie(int id) {
+        iSerieActorsPresenter.getActorSerieApi(id);
+    }
+
+    @Override
+    public void showActorSerie(ActorData actorData) {
+        Gson gson = new Gson();
+        args.putSerializable("actors",gson.toJson(actorData));
+        ActorsFragment actorsFragment = new ActorsFragment();
+        actorsFragment.setArguments(args);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.layout_actors_series,actorsFragment);
+        fragmentTransaction.commit();
+    }
+    //>>>>>>>>>>>>Termina actores de serie<<<<<<<<<<<<<<<<<//
+
     @OnClick(R.id.btn_back)
     public void btnBack() {
         finish();
@@ -189,4 +227,5 @@ public class SerieDetailsActivity extends AppCompatActivity implements IDetailSe
         Log.e(TAG,"Id de getPositionClicked " + this.id + " y posicion " + pos);
         navigateToFragmentEpisodes(this.id,pos);
     }
+
 }
