@@ -1,7 +1,5 @@
-package com.example.series.view;
+package com.example.series.view.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,13 +19,13 @@ import com.squareup.picasso.Picasso;
 public class DetailsFragment extends Fragment {
 
     private static final String TAG = "DetailsFragment";
-    SerieDetail serieDetails;
-    SerieDetailExtras serieDetailExtras;
-    TextView txtGenreDescription, txtFirstAiredDescription, txtAirsTimeDescription,
-            txtAirsDay, txtOverviewDescription, txtRatingDescription,txtTotalSeasons;
-    ImageView imgPoster;
-    Bundle args;
-    String imdbRating = "",noDescription = "";
+    private SerieDetail serieDetails;
+    private SerieDetailExtras serieDetailExtras;
+    private TextView txtGenreDescription, txtFirstAiredDescription, txtAirsTimeDescription,
+            txtAirsDay, txtOverviewDescription, txtRatingDescription, txtTotalSeasons;
+    private ImageView imgPoster;
+    private Bundle args;
+    private String imdbRating = "", noDescription = "";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,9 +36,9 @@ public class DetailsFragment extends Fragment {
             String streamDetails = (String) args.getSerializable("details");
             serieDetails = new Gson().fromJson(streamDetails, SerieDetail.class);
 
-            if(args.getSerializable("description")==null){
+            if (args.getSerializable("description") == null) {
                 noDescription = "No disponible";
-            }else{
+            } else {
                 String streamDescription = (String) args.getSerializable("description");
                 serieDetailExtras = new Gson().fromJson(streamDescription, SerieDetailExtras.class);
             }
@@ -62,34 +60,36 @@ public class DetailsFragment extends Fragment {
         clearView();
 
         if (args != null) {
-            if(serieDetailExtras==null){
+            if (serieDetailExtras == null) {
                 txtGenreDescription.setText(noDescription);
                 txtTotalSeasons.setText(noDescription);
                 txtRatingDescription.setText(noDescription);
-            }else{
-                Log.e(TAG,"Esta es mi imagen$$$"+serieDetailExtras.getPoster());
-                Log.e(TAG,"Viene por acá pero no entra :C");
+            } else {
                 Picasso.get().load(serieDetailExtras.getPoster()).into(imgPoster);
+
+
+
+
                 txtGenreDescription.setText(serieDetailExtras.getGenre());
                 txtTotalSeasons.setText(serieDetailExtras.getTotalSeasons());
                 imdbRating = serieDetailExtras.getImdbRating() + getString(R.string.divider_rating);
                 txtRatingDescription.setText(imdbRating);
             }
 
-            txtFirstAiredDescription.setText(serieDetails.getFirstAired()!=null && !serieDetails.getFirstAired().isEmpty()? serieDetails.getFirstAired() : "No disponible");
-            if(serieDetails.getAirsTime()!=null && !serieDetails.getAirsTime().isEmpty()){
+            txtFirstAiredDescription.setText(serieDetails.getFirstAired() != null && !serieDetails.getFirstAired().isEmpty() ? serieDetails.getFirstAired() : "No disponible");
+            if (serieDetails.getAirsTime() != null && !serieDetails.getAirsTime().isEmpty()) {
                 txtAirsTimeDescription.setText(serieDetails.getAirsTime());
                 txtAirsDay.setText(serieDetails.getAirsDayOfWeek());
-            }else{
-                txtAirsTimeDescription.setText(serieDetails.getAirsTime()!=null && !serieDetails.getAirsTime().isEmpty()? serieDetails.getAirsTime() : "No disponible");
+            } else {
+                txtAirsTimeDescription.setText(serieDetails.getAirsTime() != null && !serieDetails.getAirsTime().isEmpty() ? serieDetails.getAirsTime() : "No disponible");
             }
-            txtOverviewDescription.setText(serieDetails.getOverview()!=null && !serieDetails.getOverview().isEmpty()? serieDetails.getOverview() : "No disponible");
+            txtOverviewDescription.setText(serieDetails.getOverview() != null && !serieDetails.getOverview().isEmpty() ? serieDetails.getOverview() : "No disponible");
 
         }
         return view;
     }
 
-    void clearView(){
+    void clearView() {
         txtGenreDescription.setText("");
         txtFirstAiredDescription.setText("");
         txtAirsTimeDescription.setText("");

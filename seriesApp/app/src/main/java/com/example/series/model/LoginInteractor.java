@@ -41,17 +41,19 @@ public class LoginInteractor implements ILogin.model {
             public void onResponse(Call<User> call, Response<User> response) {
                 final User user = response.body();
                 if (response.code() == 200) {
-                    Gson gson = new Gson();
                     assert user != null;
-                    Log.e(TAG, "Response token: " + user.getToken());
+                    Log.e(TAG, ">>>>Response login>>>>" + user.getToken());
                     SharedPreferences sharedPreferences = ctx.getSharedPreferences(Constants.NAME_PREFS, Context.MODE_PRIVATE);
                     sharedPreferences.edit().putString(Constants.PREFS_KEY_TOKEN, user.getToken()).apply();
                     iLoginPresenter.showTokenUser(user.getToken());
                 } else {
-                    try {
-                        iLoginPresenter.showErrorApi(response.errorBody().string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (response.code() == 401) {
+                        iLoginPresenter.showErrorApi("Not authorized");
+
+                    } else {
+                        if (response.code() == 404) {
+                            iLoginPresenter.showErrorApi("Not Found");
+                        }
                     }
                 }
             }

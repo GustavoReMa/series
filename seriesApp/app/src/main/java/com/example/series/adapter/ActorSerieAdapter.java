@@ -20,7 +20,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ActorSerieAdapter  extends RecyclerView.Adapter<ActorSerieAdapter.ViewHolder>{
+public class ActorSerieAdapter extends RecyclerView.Adapter<ActorSerieAdapter.ViewHolder> {
 
     private static final String TAG = "ActorSerieAdapter";
     private List<Actor> data;
@@ -46,7 +46,6 @@ public class ActorSerieAdapter  extends RecyclerView.Adapter<ActorSerieAdapter.V
     public void onBindViewHolder(@NonNull ViewHolder vh, int i) {
         Actor actor = data.get(i);
         if (actor.getImage() != null && !actor.getImage().equals("")) {
-            Log.e(TAG,"Esto trae getImage(): " + actor.getImage());
             URL_COMPLETE = URL + actor.getImage();
             Picasso.get().load(URL_COMPLETE).into(vh.imageActor);
         }

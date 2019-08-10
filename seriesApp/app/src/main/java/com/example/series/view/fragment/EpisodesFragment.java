@@ -1,4 +1,4 @@
-package com.example.series.view;
+package com.example.series.view.fragment;
 
 
 import android.content.Context;
@@ -31,27 +31,26 @@ import java.util.List;
 public class EpisodesFragment extends Fragment {
 
     private static final String TAG = "EpisodesFragment";
-    Bundle args;
-    String notFound = "";
+    private Bundle args;
+    private String notFound = "";
     int numberSeasons = 0;
-    List<NumberSeason> numbersSeasonData;
-    NumberSeason numberSeason;
-    NumberSeasonAdapter mNumberSeasonAdapter;
+    private List<NumberSeason> numbersSeasonData;
+    private NumberSeason numberSeason;
+    private NumberSeasonAdapter mNumberSeasonAdapter;
 
-    EpisodeData episodeSerieDataList;
-    EpisodeSerieAdapter mEpisodeSerieAdapter;
-    RecyclerView numberSeasonRecyclerView, episodesRecyclerView;
-    IListenerClick IListenerClick;
-    TextView txtSeasonsEpisodes;
+    private EpisodeData episodeSerieDataList;
+    private EpisodeSerieAdapter mEpisodeSerieAdapter;
+    private RecyclerView numberSeasonRecyclerView, episodesRecyclerView;
+    private IListenerClick IListenerClick;
+    private TextView txtSeasonsEpisodes;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         args = getArguments();
         if (args != null) {
-            if(args.getString("notFound")==null){
+            if (args.getString("notFound") == null) {
                 String streamEpisodes = (String) args.getSerializable("episodes");
-                Log.d(TAG, "Recuperado desde bundle episodios " + streamEpisodes);
                 episodeSerieDataList = new Gson().fromJson(streamEpisodes, EpisodeData.class);
                 numberSeasons = args.getInt("numberSeason");
                 int position = args.getInt("position");
@@ -59,10 +58,10 @@ public class EpisodesFragment extends Fragment {
 
 
                 for (int i = 0; i < numberSeasons; i++) {
-                    if(i==position-1){
-                        numberSeason = new NumberSeason(i + 1,true);
-                    }else{
-                        numberSeason = new NumberSeason(i + 1,false);
+                    if (i == position - 1) {
+                        numberSeason = new NumberSeason(i + 1, true);
+                    } else {
+                        numberSeason = new NumberSeason(i + 1, false);
                     }
                     numbersSeasonData.add(numberSeason);
                 }
@@ -72,7 +71,7 @@ public class EpisodesFragment extends Fragment {
 
                 mEpisodeSerieAdapter = new EpisodeSerieAdapter(episodeSerieDataList.getData(), getContext());
                 mEpisodeSerieAdapter.notifyDataSetChanged();
-            }else{
+            } else {
                 notFound = "notFound";
             }
 
@@ -98,11 +97,11 @@ public class EpisodesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_episodes, container, false);
-        txtSeasonsEpisodes  = view.findViewById(R.id.txt_seasons_episodes);
+        txtSeasonsEpisodes = view.findViewById(R.id.txt_seasons_episodes);
         numberSeasonRecyclerView = view.findViewById(R.id.numbers_season_recycler_view);
         episodesRecyclerView = view.findViewById(R.id.episodes_season_recyclerview);
 
-        if(notFound.equals("notFound")){
+        if (notFound.equals("notFound")) {
             txtSeasonsEpisodes.setText("No contiene temporadas");
         }
 
@@ -119,7 +118,6 @@ public class EpisodesFragment extends Fragment {
         }
         return view;
     }
-
 
 
 }

@@ -10,9 +10,9 @@ import java.util.List;
 
 public class SeriePresenter implements ISerie.presenter {
 
-    ISerie.view iSerieView;
-    ISerie.model iSerieInteractor;
-    Context ctx;
+    private ISerie.view iSerieView;
+    private ISerie.model iSerieInteractor;
+    private Context ctx;
 
     public SeriePresenter(ISerie.view iSerieViev, Context ctx) {
         this.iSerieView = iSerieViev;

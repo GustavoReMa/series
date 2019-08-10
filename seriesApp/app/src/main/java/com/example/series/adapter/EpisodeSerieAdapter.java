@@ -3,6 +3,7 @@ package com.example.series.adapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ public class EpisodeSerieAdapter extends RecyclerView.Adapter<EpisodeSerieAdapte
     private String URL = Constants.URL_BANNER;
     private String URL_COMPLETE;
     private String overViewMore;
+    private TextView episodeAlertDialog, overviewAlertDialog;
 
     public EpisodeSerieAdapter(List<Episode> data, Context ctx) {
         this.data = data;
@@ -52,24 +54,35 @@ public class EpisodeSerieAdapter extends RecyclerView.Adapter<EpisodeSerieAdapte
             Picasso.get().load(URL_COMPLETE).into(vh.imageEpisode);
         }
 
-        if(episode.getEpisodeName()==null){
+        if (episode.getEpisodeName() == null) {
 
         }
-        vh.chapterEpisode.setText(episode.getEpisodeName()==null || episode.getEpisodeName().isEmpty() ? "No disponible" : episode.getEpisodeName());
+        vh.chapterEpisode.setText(episode.getEpisodeName() == null || episode.getEpisodeName().isEmpty() ? "No disponible" : episode.getEpisodeName());
 
-        if(episode.getOverview()==null || episode.getOverview().isEmpty()){
-            vh.overviewEpisode.setText(Resources.getSystem().getString(R.string.not_found));
-        }else{
-            if(episode.getOverview().length()>150){
-                overViewMore = episode.getOverview().substring(0,150) + "... Seguir leyendo";
+        if (episode.getOverview() == null || episode.getOverview().isEmpty()) {
+            vh.overviewEpisode.setText(ctx.getString(R.string.not_found_overview));
+        } else {
+            if (episode.getOverview().length() > 150) {
+                overViewMore = episode.getOverview().substring(0, 150) + "... Seguir leyendo";
                 vh.overviewEpisode.setText(overViewMore);
-                vh.overviewEpisode.setOnClickListener(view ->  {
-                    Toast.makeText(ctx,"Dio click",Toast.LENGTH_SHORT).show();
+                vh.overviewEpisode.setOnClickListener(view -> {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                    LayoutInflater inflater = LayoutInflater.from(ctx);
+                    View view1 = inflater.inflate(R.layout.dialog_alert,null);
+
+                    episodeAlertDialog = view1.findViewById(R.id.episode_alert_dialog);
+                    overviewAlertDialog = view1.findViewById(R.id.overview_alert_dialog);
+                    episodeAlertDialog.setText(episode.getEpisodeName());
+                    overviewAlertDialog.setText(episode.getOverview());
+
+                    builder.setView(view1);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 });
-            }else{
+            } else {
                 vh.overviewEpisode.setText(episode.getOverview());
             }
-
         }
 
         vh.firstAiredEpisode.setText(episode.getFirstAired());

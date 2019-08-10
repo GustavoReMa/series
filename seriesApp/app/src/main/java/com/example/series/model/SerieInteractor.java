@@ -18,30 +18,27 @@ import retrofit2.Response;
 public class SerieInteractor implements ISerie.model {
 
     private static final String TAG = "SerieInteractor";
-    ISerie.presenter iSeriePresenter;
-    Context ctx;
-    String token = "";
+    private ISerie.presenter iSeriePresenter;
+    private Context ctx;
+    private String token;
 
     public SerieInteractor(ISerie.presenter iSeriePresenter, Context ctx) {
         this.iSeriePresenter = iSeriePresenter;
         this.ctx = ctx;
+        token = "";
     }
 
     @Override
     public void getSeriesApi(String name) {
         getToken();
-        Log.e(TAG, token);
-        Log.e(TAG, "Nombre obtenido: " + name);
         ISerieService serieService = ServiceClient.createSerieService();
         Call<SerieData> serieDataCall = serieService.getSeries("Bearer " + token, name);
         serieDataCall.enqueue(new Callback<SerieData>() {
             @Override
             public void onResponse(Call<SerieData> call, Response<SerieData> response) {
-                Log.e(TAG, "Código del servicio " + response.code());
                 Gson gson = new Gson();
                 if (response.code() == 200) {
-
-                    Log.e(TAG, "Response getSeries service: " + gson.toJson(response.body().getData()));
+                    Log.e(TAG, ">>>>Response getSeries>>>>" + gson.toJson(response.body().getData()));
                     iSeriePresenter.showSeries(response.body().getData());
                 } else {
                     if (response.code() == 401) {

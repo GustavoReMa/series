@@ -1,11 +1,10 @@
-package com.example.series.view;
+package com.example.series.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.series.R;
 import com.example.series.interfaces.ILogin;
@@ -19,7 +18,7 @@ import butterknife.OnClick;
 public class LoginActivity extends AppCompatActivity implements ILogin.view {
 
     private static final String TAG = "LoginActivity";
-    ILogin.presenter iLoginPresenter;
+    private ILogin.presenter iLoginPresenter;
     @BindView(R.id.btn_login)
     Button loginButton;
     @BindView(R.id.rotateloading_login)
@@ -54,8 +53,8 @@ public class LoginActivity extends AppCompatActivity implements ILogin.view {
     @Override
     public void showTokenUser(String token) {
         rotateLoading.stop();
-        Log.e(TAG,token);
-        Intent intent = new Intent(LoginActivity.this, SerieSearchActivity.class);
+        Log.e(TAG, token);
+        Intent intent = new Intent(LoginActivity.this, SearchSerieActivity.class);
         startActivity(intent);
     }
 }

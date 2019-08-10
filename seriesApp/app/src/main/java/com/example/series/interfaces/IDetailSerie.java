@@ -1,17 +1,15 @@
 package com.example.series.interfaces;
 
-import com.example.series.model.entity.Serie;
 import com.example.series.model.entity.SerieDetail;
 import com.example.series.model.entity.SerieDetailExtras;
 
-import java.util.List;
-
 public interface IDetailSerie {
 
-    interface model{
+    interface model {
         void getDetailsSerieApi(int id);
     }
-    interface presenter{
+
+    interface presenter {
         //View
         void showErrorDetails(String error);
 
@@ -23,7 +21,7 @@ public interface IDetailSerie {
 
     }
 
-    interface view{
+    interface view {
         //View
         void showErrorDetails(String error);
 

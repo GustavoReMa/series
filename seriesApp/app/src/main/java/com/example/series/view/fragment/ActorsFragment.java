@@ -1,4 +1,4 @@
-package com.example.series.view;
+package com.example.series.view.fragment;
 
 
 import android.os.Bundle;
@@ -23,12 +23,12 @@ import com.google.gson.Gson;
 public class ActorsFragment extends Fragment {
 
     private static final String TAG = "ActorsFragment";
-    Bundle args;
-    ActorData actorList;
-    ActorSerieAdapter mAdapter;
-    RecyclerView actorsRecyclerView;
-    String notFound = "";
-    TextView txtActorsNotFound;
+    private Bundle args;
+    private ActorData actorList;
+    private ActorSerieAdapter mAdapter;
+    private RecyclerView actorsRecyclerView;
+    private String notFound = "";
+    private TextView txtActorsNotFound;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,13 +36,13 @@ public class ActorsFragment extends Fragment {
         args = getArguments();
         if (args != null) {
 
-            if(args.getString("notFound")==null){
+            if (args.getString("notFound") == null) {
                 String streamActors = (String) args.getSerializable("actors");
                 actorList = new Gson().fromJson(streamActors, ActorData.class);
 
                 mAdapter = new ActorSerieAdapter(actorList.getData(), getContext());
                 mAdapter.notifyDataSetChanged();
-            }else{
+            } else {
                 notFound = "notFound";
             }
         }
@@ -57,9 +57,9 @@ public class ActorsFragment extends Fragment {
         txtActorsNotFound = view.findViewById(R.id.txt_actors_notFound);
 
         if (args != null) {
-            if(notFound.equals("notFound")){
+            if (notFound.equals("notFound")) {
                 txtActorsNotFound.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 actorsRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
                 actorsRecyclerView.setHasFixedSize(true);
                 actorsRecyclerView.setAdapter(mAdapter);

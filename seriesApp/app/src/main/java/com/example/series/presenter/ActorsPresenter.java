@@ -8,14 +8,14 @@ import com.example.series.model.entity.ActorData;
 
 public class ActorsPresenter implements IActorSerie.presenter {
 
-    IActorSerie.view iActorSerieView;
-    IActorSerie.model iActorSerieInteractor;
-    Context ctx;
+    private IActorSerie.view iActorSerieView;
+    private IActorSerie.model iActorSerieInteractor;
+    private Context ctx;
 
-    public ActorsPresenter(IActorSerie.view iActorSerieView, Context ctx){
+    public ActorsPresenter(IActorSerie.view iActorSerieView, Context ctx) {
         this.iActorSerieView = iActorSerieView;
         this.ctx = ctx;
-        iActorSerieInteractor = new ActorsInteractor(this,this.ctx);
+        iActorSerieInteractor = new ActorsInteractor(this, this.ctx);
     }
 
     @Override

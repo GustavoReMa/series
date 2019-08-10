@@ -18,49 +18,50 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SerieDetailsInteractor implements IDetailSerie.model{
+public class DetailsSerieInteractor implements IDetailSerie.model {
 
-    private static final String TAG = "SerieDetailsInteractor";
-    IDetailSerie.presenter iSerieDetailPresenter;
-    SerieDetail serieDetail;
-    SerieDetailExtras serieDetailExtras;
-    Context ctx;
-    String token = "",imbdId = "";
-    public SerieDetailsInteractor(IDetailSerie.presenter iSerieDetailPresenter, Context ctx){
+    private static final String TAG = "DetailsSerieInteractor";
+    private IDetailSerie.presenter iSerieDetailPresenter;
+    private SerieDetail serieDetail;
+    private SerieDetailExtras serieDetailExtras;
+    private Context ctx;
+    private String token, imbdId;
+
+    public DetailsSerieInteractor(IDetailSerie.presenter iSerieDetailPresenter, Context ctx) {
         this.iSerieDetailPresenter = iSerieDetailPresenter;
         this.ctx = ctx;
+        token = "";
+        imbdId = "";
     }
 
 
     @Override
     public void getDetailsSerieApi(int id) {
         getToken();
-        Log.e(TAG,token);
-        Log.e(TAG,"id: " + id);
         ISerieService serieService = ServiceClient.createSerieService();
         Call<SerieDetailData> serieDetailExtrasCall = serieService.getSerieDetail("Bearer " + token, id);
         serieDetailExtrasCall.enqueue(new Callback<SerieDetailData>() {
             @Override
             public void onResponse(Call<SerieDetailData> call, Response<SerieDetailData> response) {
                 Gson gson = new Gson();
-                if(response.code()==200){
+                if (response.code() == 200) {
                     Log.e(TAG, ">>>>Response DetailsSerie>>>> " + gson.toJson(response.body().getData()));
                     serieDetail = response.body().getData();
                     imbdId = serieDetail.getImdbId();
-                    if(imbdId.equals("")){
-                        iSerieDetailPresenter.showDetailsSerie(serieDetail,null);
-                    }else{
+                    if (imbdId.equals("")) {
+                        iSerieDetailPresenter.showDetailsSerie(serieDetail, null);
+                    } else {
                         IDetailsExtrasSerieService iDetailsExtrasSerieService = ServiceClient.createDetailsSerieService();
                         iDetailsExtrasSerieService
-                                .getDetailsExtrasSerie(response.body().getData().getImdbId(),Constants.OMDB_APIKEY,Constants.PLOT)
+                                .getDetailsExtrasSerie(response.body().getData().getImdbId(), Constants.OMDB_APIKEY, Constants.PLOT)
                                 .enqueue(new Callback<SerieDetailExtras>() {
                                     @Override
                                     public void onResponse(Call<SerieDetailExtras> call, Response<SerieDetailExtras> response) {
-                                        if(response.code() == 200){
-                                            Log.e(TAG,">>>>Response DetailsSerieExtras>>>>" + gson.toJson(response.body()));
+                                        if (response.code() == 200) {
+                                            Log.e(TAG, ">>>>Response DetailsSerieExtras>>>>" + gson.toJson(response.body()));
                                             serieDetailExtras = response.body();
-                                            iSerieDetailPresenter.showDetailsSerie(serieDetail,serieDetailExtras);
-                                        }else{
+                                            iSerieDetailPresenter.showDetailsSerie(serieDetail, serieDetailExtras);
+                                        } else {
                                             if (response.code() == 401) {
                                                 iSerieDetailPresenter.showErrorDetails("Not authorized");
 
@@ -79,7 +80,7 @@ public class SerieDetailsInteractor implements IDetailSerie.model{
                                 });
                     }
 
-                }else{
+                } else {
                     if (response.code() == 401) {
                         iSerieDetailPresenter.showErrorDetails("Not authorized");
 

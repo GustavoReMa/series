@@ -7,9 +7,9 @@ import com.example.series.model.LoginInteractor;
 
 public class LoginPresenter implements ILogin.presenter {
 
-    ILogin.view iLoginView;
-    ILogin.model loginInteractor;
-    Context ctx;
+    private ILogin.view iLoginView;
+    private ILogin.model loginInteractor;
+    private Context ctx;
 
     public LoginPresenter(ILogin.view iLoginView, Context ctx) {
         this.iLoginView = iLoginView;

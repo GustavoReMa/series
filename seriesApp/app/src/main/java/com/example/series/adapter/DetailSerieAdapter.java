@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,7 @@ import android.widget.TextView;
 import com.example.series.R;
 import com.example.series.model.entity.Serie;
 import com.example.series.utils.Constants;
-import com.example.series.view.SerieDetailsActivity;
+import com.example.series.view.activity.DetailsSerieActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -24,12 +23,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SerieDetailAdapter extends RecyclerView.Adapter<SerieDetailAdapter.SeriesViewHolder> {
-    String TAG = "SerieDetailsAdapter";
+public class DetailSerieAdapter extends RecyclerView.Adapter<DetailSerieAdapter.SeriesViewHolder> {
+    private String TAG = "SerieDetailsAdapter";
     private List<Serie> data;
     private Context ctx;
 
-    public SerieDetailAdapter(Context ctx, List<Serie> data) {
+    public DetailSerieAdapter(Context ctx, List<Serie> data) {
         this.ctx = ctx;
         this.data = data;
     }
@@ -49,14 +48,13 @@ public class SerieDetailAdapter extends RecyclerView.Adapter<SerieDetailAdapter.
         holder.title.setText(serie.getSeriesName());
         if (!serie.getBanner().isEmpty()) {
             String URL = Constants.URL_BANNER + serie.getBanner();
-            Log.d(TAG, "url: " + URL);
             Picasso.get().load(URL).into(holder.banner);
             holder.banner.setBackgroundColor(Color.WHITE);
         }
 
         holder.banner.setOnClickListener(view -> {
             Bundle bundle = new Bundle();
-            Intent intent = new Intent(ctx, SerieDetailsActivity.class);
+            Intent intent = new Intent(ctx, DetailsSerieActivity.class);
             bundle.putInt("id", serie.getId());
             bundle.putString("seriesName", serie.getSeriesName());
             intent.putExtra("serie", bundle);

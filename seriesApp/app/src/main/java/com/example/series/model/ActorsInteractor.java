@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.series.api.ISerieService;
-import com.example.series.api.IUserService;
 import com.example.series.api.ServiceClient;
 import com.example.series.interfaces.IActorSerie;
 import com.example.series.model.entity.ActorData;
@@ -18,12 +17,12 @@ import retrofit2.Response;
 
 public class ActorsInteractor implements IActorSerie.model {
 
-    IActorSerie.presenter iActorSeriePresenter;
-    Context ctx;
-    String token = "";
     private static final String TAG = "ActorsInteractor";
+    private IActorSerie.presenter iActorSeriePresenter;
+    private Context ctx;
+    private String token;
 
-    public ActorsInteractor(IActorSerie.presenter iActorSeriePresenter, Context ctx){
+    public ActorsInteractor(IActorSerie.presenter iActorSeriePresenter, Context ctx) {
         this.iActorSeriePresenter = iActorSeriePresenter;
         this.ctx = ctx;
     }
@@ -32,16 +31,16 @@ public class ActorsInteractor implements IActorSerie.model {
     public void getActorSerieApi(int id) {
         getToken();
         ISerieService iSerieService = ServiceClient.createSerieService();
-        Call<ActorData> actorDataCall = iSerieService.getActors("Bearer " + token,id);
+        Call<ActorData> actorDataCall = iSerieService.getActors("Bearer " + token, id);
         actorDataCall.enqueue(new Callback<ActorData>() {
 
             @Override
             public void onResponse(Call<ActorData> call, Response<ActorData> response) {
-                if(response.code() == 200){
+                if (response.code() == 200) {
                     Gson gson = new Gson();
-                    Log.e(TAG,">>>>>Response actors>>>>> " +gson.toJson(response.body()));
+                    Log.e(TAG, ">>>>>Response actors>>>>> " + gson.toJson(response.body()));
                     iActorSeriePresenter.showActorSerie(response.body());
-                }else{
+                } else {
                     if (response.code() == 401) {
                         iActorSeriePresenter.showErrorActor("Not authorized");
 

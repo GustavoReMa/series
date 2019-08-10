@@ -1,4 +1,4 @@
-package com.example.series.view;
+package com.example.series.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,7 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.series.R;
-import com.example.series.adapter.SerieDetailAdapter;
+import com.example.series.adapter.DetailSerieAdapter;
 import com.example.series.interfaces.ISerie;
 import com.example.series.model.entity.Serie;
 import com.example.series.presenter.SeriePresenter;
@@ -29,13 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SerieSearchActivity extends AppCompatActivity implements ISerie.view {
-
-    private String TAG = "SerieSearchActivity";
-    private List<Serie> mDataSeries = new ArrayList<>();
-    private String token = "";
-    private String notFound = "";
-    String nameSerie = "";
+public class SearchSerieActivity extends AppCompatActivity implements ISerie.view {
 
     @BindView(R.id.edt_search_series)
     EditText edtSearchSeries;
@@ -49,8 +42,13 @@ public class SerieSearchActivity extends AppCompatActivity implements ISerie.vie
     RecyclerView recyclerView;
     @BindView(R.id.rotateloading_series)
     RotateLoading rotateLoading;
-    SerieDetailAdapter serieDetailAdapter;
-    ISerie.presenter iSeriePresenter;
+    private DetailSerieAdapter detailSerieAdapter;
+    private ISerie.presenter iSeriePresenter;
+    private String TAG = "SearchSerieActivity";
+    private List<Serie> mDataSeries = new ArrayList<>();
+    private String token = "";
+    private String notFound = "";
+    private String nameSerie = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +105,7 @@ public class SerieSearchActivity extends AppCompatActivity implements ISerie.vie
     @Override
     public void showError(String error) {
         desactivateRotateloading();
-        notFound = getString(R.string.not_found) + " " +nameSerie;
+        notFound = getString(R.string.not_found) + " " + nameSerie;
         txtSeriesNotFound.setVisibility(View.VISIBLE);
         txtSeriesNotFound.setText(notFound);
 
@@ -124,9 +122,9 @@ public class SerieSearchActivity extends AppCompatActivity implements ISerie.vie
         this.mDataSeries = mDataSeries;
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        serieDetailAdapter = new SerieDetailAdapter(getApplicationContext(), this.mDataSeries);
-        recyclerView.setAdapter(serieDetailAdapter);
-        serieDetailAdapter.notifyDataSetChanged();
+        detailSerieAdapter = new DetailSerieAdapter(getApplicationContext(), this.mDataSeries);
+        recyclerView.setAdapter(detailSerieAdapter);
+        detailSerieAdapter.notifyDataSetChanged();
     }
 
     private void activateRotateloading() {
@@ -147,7 +145,7 @@ public class SerieSearchActivity extends AppCompatActivity implements ISerie.vie
         txtSeriesNotFound.setVisibility(View.GONE);
         edtSearchSeries.setText("");
         mDataSeries.clear();
-        serieDetailAdapter.notifyDataSetChanged();
+        detailSerieAdapter.notifyDataSetChanged();
     }
 
     @Override

@@ -21,9 +21,9 @@ import butterknife.ButterKnife;
 public class NumberSeasonAdapter extends RecyclerView.Adapter<NumberSeasonAdapter.ViewHolder> {
 
     private static final String TAG = "NumberSeasonAdaper";
-    List<NumberSeason> data;
-    Context ctx;
-    IListenerClick IListenerClick;
+    private List<NumberSeason> data;
+    private Context ctx;
+    private IListenerClick IListenerClick;
 
     public NumberSeasonAdapter(List<NumberSeason> data, Context ctx, IListenerClick IListenerClick) {
         this.data = data;
@@ -51,8 +51,8 @@ public class NumberSeasonAdapter extends RecyclerView.Adapter<NumberSeasonAdapte
             }
         });
 
-        if(numberSeason.isSelected()){
-            vh.itemView.setBackgroundColor(Color.rgb(255,87,34));
+        if (numberSeason.isSelected()) {
+            vh.itemView.setBackgroundColor(Color.rgb(255, 87, 34));
         }
     }
 

@@ -15,32 +15,32 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EpisodesInteractor implements IEpisodesSerie.model{
+public class EpisodesInteractor implements IEpisodesSerie.model {
 
     private static final String TAG = "EpisodesInteractor";
     private IEpisodesSerie.presenter iEpisodesSeriePresenter;
     private Context ctx;
-    private String token = "";
+    private String token;
 
-    public EpisodesInteractor(IEpisodesSerie.presenter iEpisodesSeriePresenter,Context ctx){
+    public EpisodesInteractor(IEpisodesSerie.presenter iEpisodesSeriePresenter, Context ctx) {
         this.iEpisodesSeriePresenter = iEpisodesSeriePresenter;
         this.ctx = ctx;
+        token = "";
     }
 
     @Override
     public void getEpisodesSerieApi(int id, int season) {
         getToken();
-        Log.e(TAG,"Token recuperado: " + token);
         ISerieService service = ServiceClient.createSerieService();
-        Call<EpisodeData> episodeDataCall = service.getEpisodes("Bearer " + token,id,season);
+        Call<EpisodeData> episodeDataCall = service.getEpisodes("Bearer " + token, id, season);
         episodeDataCall.enqueue(new Callback<EpisodeData>() {
             @Override
             public void onResponse(Call<EpisodeData> call, Response<EpisodeData> response) {
                 Gson gson = new Gson();
-                if(response.code()==200){
-                    Log.e(TAG,">>>>Response episodesSerie>>>>" + gson.toJson(response.body().getData()));
+                if (response.code() == 200) {
+                    Log.e(TAG, ">>>>Response episodesSerie>>>>" + gson.toJson(response.body().getData()));
                     iEpisodesSeriePresenter.showEpisodesSerie(response.body());
-                }else{
+                } else {
                     if (response.code() == 401) {
                         iEpisodesSeriePresenter.showErrorEpisodes("Not authorized");
 
